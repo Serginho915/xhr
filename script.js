@@ -1,21 +1,28 @@
-// debugger;
-const request1 = new XMLHttpRequest();
-const request2 = new XMLHttpRequest();
-let finalArr = [];
-request1.open(`GET`, `./data.json`,false); 
-request2.open(`GET`, `./data2.json`,false); 
+let arr = [];
 
-request1.send();
-request2.send();
+const getFile = file => {
+    const request = new XMLHttpRequest();
+    request.open(`GET`, file);
+    request.send();
+    request.addEventListener(`readystatechange`, () => {
+        if(request.readyState === 4 && request.status===200){
+            let resp = JSON.parse(request.response)
+            let test = Array.from(resp.children)
+           
 
-let response = request1.response;
-response = JSON.parse(response);
+           for (const child of test) {
+                arr.push(child)
+           }
+           console.log(arr)
+        }
 
-let response2 = request2.response;
-response2 = JSON.parse(response2);
+    })
+}
 
-finalArr.push(...response.children, ...response2.children)
-console.log(finalArr)
+
+
+getFile(`./data.json`);
+getFile(`./data2.json`);
 
 
 
